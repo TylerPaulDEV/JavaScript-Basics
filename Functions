@@ -1,0 +1,201 @@
+<-- What is a Funtion? -->
+
+A function is a group of related JavaScript statements that are separate from the rest of the script and that perform a designated task. 
+When your script needs to perform a task, you tell it to run the function.
+
+Functions are useful when you need to control exactly when a particular task occurs. If you enter some statements between your web page's <script> </script> tags, the browser executes those statements automatically when the page loads. However, the statements within a function aren't executed by the browser automatically. Instead, the function doesn't execute until either your code asked the function to run, or some event occurs.
+
+
+<-- The structure of a Function -->
+
+The basic structure of a function looks like this:
+
+  function "functionName"([arguments]) {
+            JavaScript statements
+            }
+            
+ Summary of various parts:
+ 
+ >> Function: Identifies the block of code that follows it as a function
+ >> functionName: A unique name for the funtion. 
+ >> arguments: One or more optional values that are passed to the function and that act as a variables within the function. Arguments (or parameters, as they're sometimes called) are typcally one or more values that the function uses the raw materials for its tasks or calculations. You always enter arguments between parentheses after the function name, and you separate multiple arguments with commas. If you don't use arguments, you must still include the parentheses after the function name.
+ >> JavaScript statements: This is the code that performs the function's tasks or calculations.
+ 
+Note, too, the use of braces ({ and }). These are used to enclose the function's statements within the block, which tells you (and the browser) where the function's code begins and ends. There are only two rules for where these braces appear:
+ 
+ >> The opening brace must appear after the function's parentheses and before the function statement.
+ >> The closing brace must appear after the last function statement.
+
+
+<-- Where do you put a function? -->
+
+For most applications, it doesn't matter where you put your functions, as long as they reside within a <script> block. However, one of the most common uses of functions is to handle events when they're triggered. It's possible that a particular event might fire when the page is loading, and if that happens before the browser has parsed the corresponding function, you could get strange results or an error. To prevent that, it's good practice to place the script containing all your functions within the page's header section (or within an external JavaScript file).
+
+Note, as well, that you can add as many functions as you want within a single <script> block, but there are two things to watch out for:
+>> Each function must have a unique name. In fact, all the functions that exist in or are referenced by a page must have a unique names.
+>> You can't embed one function inside another function
+
+
+<-- Calling a function -->
+
+After you function is defined, you'll eventually need to tell the browser to execute it, or call it. There are three main ways to do this:
+>> When the browser parses the <script> tag.
+>> After the page is loaded.
+>> In response to an event, such as the user clicking a button.
+
+//Calling a function when the <script> tag is parsed:
+
+The simplest way to call a function is to include in your script a statement consisting of only the function name, followed by parentheses (assuming for the moment that your function name, followed by parentheses (assuming for the moment that your function uses no arguments.) The following code provides an example:
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Calling a function when the &lt;script&gt; tag is parsed</title>
+    <script>
+        function displayGreeting() {
+            var currentHour = new Date().getHours();
+            if (currentHour < 12) {
+              console.log("good morning!");
+              } else {
+                console.log("good day!");
+              }
+           }
+           displayGreeting();
+         </script>
+        </head>
+        <body>
+        </body>
+        </html>
+        
+ The <script> tag includes a function named displayGreeting, which determines the current hour of the day, and then writes a greeting to the console based on whether it's currently morning. The function is called by the displayGreeting() statement that appears just after the function.
+ 
+ 
+ //Calling a function after the page is loaded
+ 
+ If your function references a page element, then calling the function from within the page's head section won't work because when the broser parses the script, the rest of the page hasn't loaded yet, so your element reference will fail.
+ 
+ To work around this problem, place another <script> tag at the end of the body section, just before the closing </body> tag, as shown here:
+ 
+ <!DOCTYPE html>
+ <html lang="en">
+ <head>
+    <meta charset="utf-8">
+    <title> Calling a function after the page is loaded</title>
+    <script>
+        function makeBackgroundRed() {
+          document.body.style.backgroundColor = "red";
+          console.log("The background is now red.");
+        }
+      </script>
+     </head>
+     <body>
+      <!-- other elements go here -->
+      
+      <script>
+        makeBackgroundRed();
+       </script>
+     </body>
+    </html>
+    
+The makeBackgroundRed() function does two things: It uses document.body.style.backgroundColor to change the background color of the body element to red, and it uses console.log() to write a message to that effect on the console.
+
+In the function, document.body is a refence tot he body element, which doesn't "exist" until the page is fully loaded. That means if you try to call the function with the intital script, you'll get an error. To execute the function properly, a second <script> tag appears at the bottom of the body element and that script calls the function witht he following statement: 
+
+makeBackgroudnRed();
+
+Since by the time the browser executes that statement the body element exists, the function runs without an error.
+
+
+//Calling a function in response to an event
+
+One of the most common ways that JavaScript functions are called is in response to some event
+
+<Script>
+    Function makeBackgroundRed() {
+          document.body.style.backgroundColor = "white";
+          }
+     Function makeBackgroundWhite() {
+          document.body.style.backgroundColor = "white";
+          }
+       </script>
+       
+       <button onClick = "makeBackgroundRed()">
+              makeBackgroundRed
+              </button>
+              
+The onClick attribute here says "when somebody click this button, call the function named makeBackgroundRed()"
+
+<-- Passing Values to Functions -->
+
+One of the main reasons to use a function is to gain control over when some chuck of JS code gets executed
+
+However, there is another major reason:
+
+<-- to avoid repeating code unecessarily --> 
+
+Whenever you end up with two or more functions that do essentially the same thing, you know your code is ineffecient.
+
+  Argunments make your code more efficient.
+  
+An argument is a value that is "sent" or passed to the function.
+
+The argument acts just like a variable, and it automatically stores whatever value is sent.
+
+< -- Passing a single value to a function -->
+
+You can take the previous two functions, reduce them to a single function, and set up the color value as an argument:
+
+        function changeBackgroundColor(newColor) {
+            document.body.style.backgroundColor = newColor;
+            }
+            
+The argument is named newColor as a variable automatically  
+
+So, how do you pass a valve to the function?
+
+The key here is the onClick attribute that appears in both <button> tags:
+    
+      onClick = "changeBackColor('red')"
+      
+The string 'red' is inserted into the parenthese after the function name, so that value is passed to the function itself. The other button passes the 'white', and the functionr esult changes accordingly.
+
+< -- passing mutiple values to a function -->
+
+For more complex functions, you might need to use multiple arguents so that you can pass different kinds of values. 
+
+If you use multiple arguments, seperate each one with a comma:
+
+        function changeColors(newBackColor, newFrontColor) {
+        document.body.style.backgroundColor = newBackColor;
+        document.body.style.color = newFrontColor;
+        }
+        
+In this function, the document.style.color statement changes the forground color (that is, the color of the page text)
+
+          <button onClick ="changeColors('red, 'white')">
+              Red Background, White Text
+              
+If you define a function to have multiple arguments, then you must always pass values for each of those arguments to the function.
+
+If you don't, then the "value" undefined is passed, instead, which can cause problems
+
+If you use a variable to pass data to a function. Only the current value of that variable is sent, not the variable itself.
+
+Therefore, if you change the value of the argument within the function, the value of the original variable isn't changed
+
+  var passThis = 10;
+  Function sendME(acceptThis( {
+    acceptThis = 5;
+    }
+   SendMe(passThis);
+   console.log(passThis);
+   
+The variable passThis starts off with a value of 10. 
+The function sendMe() is then defined to accept attribute named acceptThis and to then changed the value of the attribute to 5.sendMe() is then called and the value of passThis. If you run this code, the displayed value will be 10., the original value of passThis. In other words, changing the value of acceptThis within the funcatins had no effect on the value of the passThis Variable
+
+
+
+
+       
+    
