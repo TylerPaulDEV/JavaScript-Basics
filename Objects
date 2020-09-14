@@ -1,0 +1,406 @@
+<-- Objects (source: https://javascript.info/object)-->
+
+As we know there are eight data types in JavaScript. Seven of them are called "primitive", because their values contain only a single thing (be it a string or a number or whatever).
+
+In contrast, objects are used to store keyed collections of various data and more complex entities. In JavaScript, objects penetrate almost every aspect of the language. So we must understand them first before going in-depth anywhere else.
+
+An object can be created with a figure bracket {...} with an optional list of properties.
+
+What is a property?
+
+A property is a "key:value" pair, where key is a string (also called a "property name"), and value can be anything.
+
+We can imagine an object as a cabinet with signed files. Every piece of data is stored in its file by the key. It's easy to find a file by its name or add/remove a file.
+
+Sn empty object ("empty cabinet") can be created using one of two syntaxes:
+
+let user = new object(); // "object contructor" syntax
+let user = {}; // "object literal" syntax
+
+usually, the figure brackets {...} are used. That declaration is called an object literal.
+
+Literals and properties
+
+We can immediately put some properties into {...} as "key:value" pairs:
+
+let user = { // an object
+  name: "john", // by key "name" store value "john"
+  age: 30 // by key "age" store value 30
+  };
+  
+  A property has a key (also known as "name" or "identifer") before the colon ":" and a value to the right of it.
+  
+  In the user object, there are two properties:
+  
+  1. The first property has the name "name" and the value "John"
+  2. The second on has the name "age" and the value 30
+  
+  The resulting user object can be imagined as a cabnet with two signed files labeled "name" and "age" 
+  
+  We can add, remove and read files from it any time.
+  
+  Property values are accessible using the dot notation:
+  
+  // get property values of the object:
+  alert(user.name); // John
+  alert(user.age); // 30
+  
+  The value can be of any type. Let's add a boolean one:
+  
+  user.isAdmin = true;
+  
+  To remove a property, we can use delete operator:
+  
+  delete user.age;
+  
+  We can also use multiword property names, but then they must be quoted:
+  
+  let user = {
+  
+    name: "John",
+    age: 30,
+    "likes birds": true // multiword property name must be quoted
+    };
+    
+ The last property in the list may end with a comma:
+ 
+    let user = {
+    name: "john",
+    age: 30,
+    }
+    
+That is called a "trailing" or "hanging" comma. Makes it easier to add/remove/move around properties, because all lines become alike.
+
+One important note is that an object declared as const can be modified.
+
+For instance: 
+
+    const user = {
+    name: "john"
+    };
+   user.name = "pete"; // (*)
+   
+   aler(user.name); // Pete
+
+It might seem that the line (*) would cause an error, but no. The const fixes the value of user, but not its contents.
+
+The const would give an error only if we try to set user = ... as a whole
+
+Square Brackets
+
+for multiword properties, the dot access doesn't work:
+
+// this would give a syntax error
+user.likes birds = true
+
+Javascript doesn't understand that. It thinks we address user.likes, and then gives a syntax error when comes across unexpected birds
+
+The dot requires the key to be a valid variable indentifire. That implies: contains no spaces, doesn't start with a digit and doesn't include special characters ($ and _ are allowed).
+
+There's an alternative "square bracket notation" that works with any string:
+
+let user = {};
+
+// set 
+user ["likes birds"] = true;
+
+//get
+alert(user["likes birds"]); //true
+
+//delete
+delete user["likes birds"];
+
+now everything is fine. Please note that the string inside the brackets is properly quoted (any type of quotes will do).
+
+Square brackets also provide a way to obtain the property name as the result of any expression - as opposed to a literal string - like from a variable as follows:
+
+let key = "likes birds";
+
+//same as user["likes birds"] = true;
+user[key] = true;
+
+here, the variable key may be calculated at run-time or depend on the user input. And then we use it to access the property.That gives us a great deal of flexibility.
+
+For instance:
+
+let user = {
+  name: "john".
+  age: 30
+  };
+
+let key = prompt("what do you want to know about the user?", "name");
+
+//access by variable
+alert( user[key]); //John (if enter "name")
+
+The dot notation cannot be used in a similar way:
+
+let user = {
+  name: "John",
+  age: 30
+  };
+  
+let key ="name";
+alert( user.key) //undefined
+
+Computer Properties
+
+We can use square brackets in an object literal, when creating an object. Thats called computed properties.
+
+For instance:
+
+let fruit = prompt("Which fruit to buy?", "apple";
+
+let bag = {
+[fruit]: 5, //the name of the property is taken from the cariable fruit
+};
+
+alert( bag.appl ); //5 if fruit = "apple"
+
+The meaning of a computed property is simple: [fruit] means that the property name should be taken from fruit
+
+so, if a visitor enters "apple", bag will become {apple:5}
+
+Essentially, that works the same as:
+
+let fruit = prompt("which fruit to buy?", "apple");
+let bag = {};
+
+// take property name from the fruit variable
+bag[fruit] = 5
+
+... but looks nicer.
+
+We can use more complex expressions inside square brackets"
+
+let fruit = 'apple';
+let bag = {
+  [fruit + 'computers']: 5 // bag.appleComputers = 5
+ };
+ 
+Square brackets are much more powerful than the dot notation. They allow any property names and variables. But they are also more cumbersome to write.
+So most of the time, when property names are known and simple, the dot is used. And if we need something more complex, then we switch to square brackets.
+
+Property value Shorthand
+
+In real code we often use existing variables as values for property names
+
+For instance:
+
+function makeUser(name, age) {
+  return {
+  name: name
+  ager: age,
+  // ... other properties
+  };
+ }
+ 
+let user = makeUser("John", 30);
+alert(user.name); // John
+
+In the example above, properties have the same names as variables. The use-case of making a property from a variable is so common, that there's a special property value shorthand to make it shorter.
+
+Instead of name:name we can just write name, like this:
+
+function makeUser(name, age) {
+  reutrn {
+  name, //same as name:name
+  age, // same as age:age
+  // ...
+ };
+}
+
+We can use both normal properties and shorthands int he same object:
+
+let user = {
+  name, //same as name:name
+  age: 30
+  };
+  
+Property names limitations
+
+as we already know, a variable cannot have a name equal to one of language-reserved words like "for", "let", "return: etc.
+
+But for an object property, there's no such restriction:
+
+// these properties are all right
+let obj = {
+  for: 1,
+  let: 2,
+  return: 3
+ };
+ 
+ alert( obj.for +obj.let + obj.return); //6
+ 
+ In short, there are no limitations on property names. They can be any strings or symbols (a special type for identifiers, to be covered later).
+ 
+ Other types are automatically converted to strings.
+ 
+ For instance, a number 0 becomes a string "0" when used as a property key:
+ 
+ let obj = {
+ 0: "test" // same as "0": "test"
+};
+
+// both alerts access the same property (the number 0 is converted to string "0")
+alert( obj["0"]);// test
+alert( obj[0]); //test (same property)
+
+Theres a minor gotcha with a special property names _pronto_. We can't set it to a non-object value:
+
+let obj = {};
+obj._pronto_ = 5; //assign a number
+alert(obj._pronto_); // [object Object] - the value is an object, didnt work as intended
+
+As we see fromt he code, the assignment to a primitive 5 is ignored.
+
+
+Property existence test, "in" operator
+
+a notable feature of objects in JavaScript, compared to many other languages, is that it's possible to access any property. There will be no error if the property doesn't exist!
+
+Reading a non-existing property just returns undefined. So we can easily test whether the property exists:
+
+let user = {};
+
+alert( user.noSuchProperty === undefined ); // true means "no such property"
+
+Theres also a special operator "in" for that.
+
+The syntax is:
+
+"key" in object
+
+for instance:
+
+let user = {name: "john", age: 30);
+
+alert( "age" in user ); //true, user.age exists
+alert("blabla" in user ); // false, user.blabla doesn't exist
+
+Please note on the left side of in there must be a property name. Thats usually a quoted string.
+
+If we omit quotes, that means a variable, it should containe the actual name to be tested. as shown:
+
+let user = {age: 30};
+
+let key = "age";
+alert(key in user); //true, property "age" exists
+
+Why does the in operator exist? isn't it enough to compre against undefined?
+
+well, most of the time the comparison with undefined works fine. But there's a special case when it fails, but "in" works correctly.
+
+It's when an object property exists, but stores undefined:
+
+let obj = {
+    test: undefined
+ };
+ 
+alert( obj.test); // it's undefined, so - no such property?
+
+alert( "test" in obj ); // true, the property does exist!
+
+In the code above, the property obj.test technically exists. So the in operator works right
+
+situations like this happen very rarely, because undefined should not be explicitly assigned. We mostly use null for "unknown" or "empty" values. So the in operator is an exotic guest in the code.
+
+The "for...in" loop
+
+To walks over all keys of an object, there exists a special form of the loop: for..in. this is a completely different thing fromt he for(;;) construct that we strudies before.
+
+for (key in object) {
+// executes the body for each key among object properties
+}
+
+For instance, let's output all properties of user:
+
+let user = {
+  name: "john"
+  age: 30,
+  isAdmin: true
+  };
+  
+for (let key in user){
+  //keys
+  alert( key) ; //name, age, isAdmin
+  //values for the keys
+  alert(user[key]); //John, 30, true
+  
+  note that all "for constructs allow us to declare the looping variable inside the loop, like let key here.
+  
+  also, we could use another variable name here instead of key. For instance, "for (let prop in obj)" is also widely used.
+  
+  Ordered like an object
+  
+  Are objects ordered? in other words, if we loop over an object, do we get all properties int he same order they were added? Can we rely on this?
+  
+  The short answer is "order in a special fashion": integer properties are sorted, others appear in creation order.
+  
+  The details follow.
+  
+  As an example, let's consider an object witht he phone codes:
+  
+  let codes = {
+  "49": "germany"
+  "41": "switzerland",
+  "44": "Great Britain",
+  //..,
+  "1": "USA"
+  };
+  
+ for (let code in codes) {
+ alert(code); //1, 41, 44, 49
+ }
+ 
+The object mmay be used to suggest a list of options to the user. If we're making a site mainly for German audience then we probably want 49 to be the first
+
+but if we run the code, we see a totally different picture:
+
+USA (1) goes first
+then Switzerland (41)
+
+The phone codes go in the ascending sorted order, because they are integers. So we see 1, 41, 44, 49
+
+<-- Summary -->
+
+Objects are associate arrays with several special features.
+
+They store properies (key-value pairs), where:
+ - Property Keys must be strings or symbols (usually strings)
+ - Values can be of any type
+ 
+To access a property, we can use:
+- The dot notation: obj.property
+- square brackets notation obj["property"]. Square brackets allow to take the key from a variable, like obj[varWithKey]
+
+Addition operators:
+- to delete a property: delete obj.prop
+- to check if a property with the given key exists: "key" in obj
+- to interate over an objectL for (let key in obj) loop
+
+What we've strudied in this chapter is called a "plain object", or just "object"
+
+There are many other kinds of objects in JavaScript:
+
+- Array to store ordered data collections,
+- date to store the information about the date and time,
+- error to stor the information about an error
+
+They have their special features that we'll study late. Sometimes people say something like "Array type" or "date type", but formally they are not types of their own, but belong to a single "object" data type. And they extend it in various ways.
+
+Objects in JavaScript are very powerful. This has just scratched the surface of a topic that is really huge. 
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+  
+  
