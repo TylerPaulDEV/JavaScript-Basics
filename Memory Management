@@ -1,0 +1,128 @@
+Memory Management in JavaScript is performed automatically and invisibly to us. We create primitives, objects, functions... All that takes memory.
+
+What happens when something is not needed any more? How does the JavaScript egine discover it and clean it up?
+
+
+<-- Reachability -- >
+
+The main concept of memory management in JavaScript is reachability
+
+Simply put, "reachable" values are those that are accessible or usable somehow. They are guaranteed to be stored in memory.
+
+  1. There's a base set of inherently reachable values, that cannot be deleted for obvious reasons.
+  
+    For instance: 
+      
+      - Local variables and paramaters of the cureent funtion.
+      - Variables and parameters for other functions on the current chain of nested calls.
+      - Global variables.
+      - (there are some other, internal ones as well)
+      
+      These values are called roots.
+   
+   2. Any other value is considered reachable if it's reachable from a root by a reference or by a chain references.
+   
+      For instance, if there's an object in a global variable, and that object has property referencing another object, that object is considered reachable. And those that to           references are also reachable. 
+      
+  
+ There's a background process in the JavaScript engine that is called garbage collector. It monitors all objects and removes those that have become unreachable.
+ 
+ 
+<-- A simple example -- >
+
+Here's the simplest example:
+
+// use has a reference to the object
+
+let user = {
+    name: "John"
+   };
+   
+   <global> -->user-->Object name: "John"
+   
+   
+   Here the arrow depicts an object reference. The global variable "user" references the object {name: "John"} (we'll call it John for brevity). The "name" property of John stores    a primitive, so it's painted inside the object.
+   
+      user = null;
+     
+      <global> user: null
+   
+   Now John becomes unreachable. There;s no way to access it, no references to it. Garbagae collector will junk the data and free the memory.
+   
+
+Two refernces 
+
+Now let's imagine we copied the reference from user to admin
+
+//user has a reference to the object
+let user = {
+    name: "John"
+    };
+    
+let admin = user;
+
+<global> ==> user, admin ==> object name: "John"
+
+Now if we do the same:
+
+user = null;
+
+... Then the object is still reachable via admin global variable, so it's in memory. If we overwrite admin too, then it can be removed.
+
+Interlinked objects 
+
+Now a more complex example. The Family:
+
+    function marry(man, woman) {
+    woman.husband = man;
+    man.wife = woman;
+    
+    return {
+    father: man,
+    mother: woman
+   }
+  }
+  
+    let family = marry({
+      name: "John"
+     }, {
+      name: "Ann"
+     });
+     
+  Function marry "marries two objects by giving them references to each other and returns a new object that contains them both.
+  
+  The resulting memory structure:
+  
+  <global variable> --family--> Object
+  
+  
+  Internal algorathms
+  
+  The basic garbage collection algortithm is called "mark-and-sweep".
+  
+  The following "garbage collection" steps are regurlarly performed:
+  
+  - The garbage collector takes rootes and "marks" (remembers) them.
+  - then it visits and "marks" all references from them.
+  - The it visits marked objects and marks their references. All visited objects are remembered, so as not to visit the same object twice in the future.
+  - ...And so on until every reachable (from the roots) references are visited
+  - All objects except marked ones are removed.
+  
+<-- Summary -->
+
+The main things to know:
+
+- Garbage collection is performed automatically. We cannot force or prevent it.
+- Objects are retained in memory while they are reachable.
+- Bering referenced is not the same as being reachable (from a root): a pack of interlinked objects can become unreachable as a whole
+
+modern engines implement advanced algorithms of garbage collection.
+
+
+     
+   
+   
+   
+   
+   
+   
